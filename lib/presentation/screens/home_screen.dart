@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:store_app_using_bloc/core/constants/bottom_navigation_bar_items.dart';
 
 import '../animations/page_transition.dart';
+
+GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: PageTransition(
         child: screens[currentIndex],
       ),
@@ -31,19 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
           currentIndex = index;
         },
         selectedFontSize: 0,
-        items: returnBottomNavigationBarItems(),
+        items: bottomNavigationBarItems,
       ),
     );
-  }
-
-  returnBottomNavigationBarItems() {
-    List<BottomNavigationBarItem> bottomNavigationBarItems = [
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.home_rounded),
-        activeIcon: Icon(Icons.home_rounded),
-      ),
-    ];
-
-    return bottomNavigationBarItems;
   }
 }
