@@ -1,7 +1,7 @@
-import 'package:store_app_using_bloc/core/api/api_services.dart';
 import 'package:store_app_using_bloc/core/constants/api_endpoints.dart';
 import 'package:store_app_using_bloc/data/models/product.dart';
 
+import 'api_services.dart';
 import 'models/mobile_response.dart';
 
 class StoreApiProvider {

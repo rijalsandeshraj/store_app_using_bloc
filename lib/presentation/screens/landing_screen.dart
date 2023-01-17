@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:store_app_using_bloc/core/constants/bottom_navigation_bar_items.dart';
+import 'package:store_app_using_bloc/presentation/screens/products_screen.dart';
 
 import '../animations/page_transition.dart';
 
 GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class LandingScreen extends StatefulWidget {
+  const LandingScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<LandingScreen> createState() => _LandingScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _LandingScreenState extends State<LandingScreen> {
   int currentIndex = 0;
 
   final List<Widget> screens = [
-    // const FoodListScreen(),
+    const ProductsScreen(),
     // const CartScreen(),
     // const FavoriteScreen(),
     // const ProfileScreen()

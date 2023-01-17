@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:store_app_using_bloc/presentation/screens/home_screen.dart';
+import 'package:store_app_using_bloc/presentation/screens/landing_screen.dart';
 
 import '../core/utils/show_custom_snack_bar.dart';
 

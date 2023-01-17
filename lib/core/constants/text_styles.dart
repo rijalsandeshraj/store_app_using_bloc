@@ -2,32 +2,32 @@ import 'package:flutter/material.dart';
 
 import 'colors.dart';
 
-// TextStyle for header
-const TextStyle headerTextStyle = TextStyle(
-  fontWeight: FontWeight.normal,
+// TextStyle for primary headings
+const TextStyle primaryTextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
   color: AppColor.black87,
-  fontSize: 24,
+  fontSize: 20,
 );
 
-// TextStyle for subheader
-const TextStyle subheaderTextStyle = TextStyle(
-  fontWeight: FontWeight.normal,
-  color: AppColor.black87,
+// TextStyle for secondary text
+const TextStyle secondaryTextStyle = TextStyle(
+  fontWeight: FontWeight.w500,
+  color: AppColor.grey,
   fontSize: 16,
 );
 
-// TextStyles for HomeScreen
-const TextStyle homeButtonTextStyle = TextStyle(
-  fontWeight: FontWeight.normal,
-  color: AppColor.white,
+// TextStyle for selected category text
+const TextStyle selectedCategoryTextStyle = TextStyle(
+  fontWeight: FontWeight.w500,
+  color: AppColor.primaryPink,
   fontSize: 16,
 );
 
 // TextStyles for OrderScreen
-const TextStyle normalTextStyle1 = TextStyle(
+const TextStyle sectionActionTextStyle = TextStyle(
   fontWeight: FontWeight.normal,
-  color: AppColor.black80,
-  fontSize: 12,
+  color: AppColor.grey,
+  fontSize: 14,
 );
 
 const TextStyle orderStatusTextStyle = TextStyle(
