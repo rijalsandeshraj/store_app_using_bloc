@@ -18,7 +18,7 @@ class ProductsScreen extends StatelessWidget {
     Size deviceSize = MediaQuery.of(context).size;
     double deviceHeight = deviceSize.height;
     double deviceWidth = deviceSize.width;
-    double topPadding = MediaQuery.of(context).padding.top;
+    // double topPadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       backgroundColor: AppColor.scaffoldBackground,
