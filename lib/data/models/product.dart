@@ -31,6 +31,9 @@ class Product {
         category: json["category"],
         image: json["image"],
         rating: Rating.fromJson(json["rating"]),
+        quantity: 1,
+        addedToCart: false,
+        isFavorite: false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -40,7 +43,10 @@ class Product {
         "description": description,
         "category": category,
         "image": image,
-        "rating": rating!.toJson(),
+        "rating": rating?.toJson(),
+        "quantity": quantity,
+        "addedToCart": addedToCart,
+        "isFavorite": isFavorite,
       };
 
   Product copyWith({
@@ -59,13 +65,13 @@ class Product {
       id: id ?? this.id,
       title: title ?? this.title,
       price: price ?? this.price,
-      quantity: quantity ?? this.quantity,
-      addedToCart: addedToCart ?? this.addedToCart,
-      isFavorite: isFavorite ?? this.isFavorite,
       description: description ?? this.description,
       category: category ?? this.category,
       image: image ?? this.image,
       rating: rating ?? this.rating,
+      quantity: quantity ?? this.quantity,
+      addedToCart: addedToCart ?? this.addedToCart,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 }

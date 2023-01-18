@@ -2,13 +2,13 @@ part of 'product_bloc.dart';
 
 @immutable
 class ProductState extends Equatable {
-  final List<Product> productList;
+  final List<Product>? productList;
 
   const ProductState({
-    required this.productList,
+    this.productList,
   });
 
-  const ProductState.initial(List<Product> productList)
+  const ProductState.initial(List<Product>? productList)
       : this(productList: productList);
 
   @override

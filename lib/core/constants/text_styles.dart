@@ -30,6 +30,20 @@ const TextStyle sectionActionTextStyle = TextStyle(
   fontSize: 14,
 );
 
+// TextStyles for OrderScreen
+const TextStyle productTitleTextStyle = TextStyle(
+  fontWeight: FontWeight.normal,
+  fontSize: 12,
+  color: AppColor.black80,
+);
+
+// TextStyles for OrderScreen
+const TextStyle productPriceTextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  fontSize: 12,
+  color: AppColor.black87,
+);
+
 const TextStyle orderStatusTextStyle = TextStyle(
   fontWeight: FontWeight.normal,
   color: AppColor.black80,

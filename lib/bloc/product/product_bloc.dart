@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:store_app_using_bloc/data/store_repository.dart';
 
 import '../../data/models/product.dart';
 
@@ -10,7 +11,7 @@ part 'product_state.dart';
 
 class ProductBloc extends HydratedBloc<ProductEvent, ProductState> {
   ProductBloc({required this.repository})
-      : super(ProductState.initial(repository.getProductList)) {
+      : super(ProductState.initial(repository.allProducts)) {
     on<IncreaseQuantityEvent>(_increaseQuantity);
     on<DecreaseQuantityEvent>(_decreaseQuantity);
     on<RemoveItemEvent>(_removeItem);
@@ -18,16 +19,16 @@ class ProductBloc extends HydratedBloc<ProductEvent, ProductState> {
     on<AddToCartEvent>(_addToCart);
   }
 
-  var repository;
+  final StoreRepository repository;
 
   void _increaseQuantity(
       IncreaseQuantityEvent event, Emitter<ProductState> emit) {
-    int index = state.productList.indexOf(event.product);
+    int index = state.productList!.indexOf(event.product);
 
-    final List<Product> productList = state.productList.map((element) {
+    final List<Product> productList = state.productList!.map((element) {
       if (element.id == event.product.id) {
-        return state.productList[index]
-            .copyWith(quantity: state.productList[index].quantity + 1);
+        return state.productList![index]
+            .copyWith(quantity: state.productList![index].quantity + 1);
       }
       return element;
     }).toList();
@@ -37,25 +38,26 @@ class ProductBloc extends HydratedBloc<ProductEvent, ProductState> {
 
   void _decreaseQuantity(
       DecreaseQuantityEvent event, Emitter<ProductState> emit) {
-    int index = state.productList.indexOf(event.product);
+    int index = state.productList!.indexOf(event.product);
 
-    final List<Product> productList = state.productList.map((element) {
+    final List<Product> productList = state.productList!.map((element) {
       if (element.id == event.product.id && element.quantity > 1) {
-        return state.productList[index]
-            .copyWith(quantity: state.productList[index].quantity - 1);
+        return state.productList![index]
+            .copyWith(quantity: state.productList![index].quantity - 1);
       }
       //for Item quantity less than zero this statement will be called
       if (element.id == event.product.id) {
         //Remove item from cart
-        return state.productList[index].copyWith(addedToCart: false);
+        return state.productList![index].copyWith(addedToCart: false);
       }
       return element;
     }).toList();
+
     emit(ProductState(productList: productList));
   }
 
   void _removeItem(RemoveItemEvent event, Emitter<ProductState> emit) {
-    final List<Product> productList = state.productList.map((element) {
+    final List<Product> productList = state.productList!.map((element) {
       if (element.id == event.product.id) {
         return event.product.copyWith(addedToCart: false);
       }
@@ -66,23 +68,24 @@ class ProductBloc extends HydratedBloc<ProductEvent, ProductState> {
   }
 
   void _isFavorite(FavoriteItemEvent event, Emitter<ProductState> emit) {
-    int index = state.productList.indexOf(event.product);
-    final List<Product> productList = state.productList.map((element) {
+    int index = state.productList!.indexOf(event.product);
+    final List<Product> productList = state.productList!.map((element) {
       if (element.id == event.product.id) {
         return event.product
-            .copyWith(isFavorite: !state.productList[index].isFavorite);
+            .copyWith(isFavorite: !state.productList![index].isFavorite);
       }
       return element;
     }).toList();
+
     emit(ProductState(productList: productList));
   }
 
   void _addToCart(AddToCartEvent event, Emitter<ProductState> emit) {
-    int index = state.productList.indexOf(event.product);
+    int index = state.productList!.indexOf(event.product);
 
-    final List<Product> cartProduct = state.productList.map((element) {
+    final List<Product> cartProduct = state.productList!.map((element) {
       if (element.id == event.product.id) {
-        return state.productList[index].copyWith(addedToCart: true);
+        return state.productList![index].copyWith(addedToCart: true);
       }
       return element;
     }).toList();
@@ -98,7 +101,7 @@ class ProductBloc extends HydratedBloc<ProductEvent, ProductState> {
 
   double get getTotalPrice {
     double totalPrice = 5;
-    for (var element in state.productList) {
+    for (var element in state.productList!) {
       if (element.addedToCart) {
         totalPrice += element.quantity * element.price!.toDouble();
       }
@@ -107,10 +110,10 @@ class ProductBloc extends HydratedBloc<ProductEvent, ProductState> {
   }
 
   get getCartList =>
-      state.productList.where((element) => element.addedToCart).toList();
+      state.productList!.where((element) => element.addedToCart).toList();
 
   get getFavoriteList =>
-      state.productList.where((element) => element.isFavorite).toList();
+      state.productList!.where((element) => element.isFavorite).toList();
 
   @override
   ProductState? fromJson(Map<String, dynamic> json) {
