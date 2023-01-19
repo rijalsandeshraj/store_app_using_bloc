@@ -10,8 +10,9 @@ part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends HydratedBloc<ProductEvent, ProductState> {
-  ProductBloc({required this.repository})
-      : super(ProductState.initial(repository.allProducts)) {
+  ProductBloc(StoreRepository repository)
+      : super(ProductState(productList: repository.allProducts)) {
+    getAllProducts(repository);
     on<IncreaseQuantityEvent>(_increaseQuantity);
     on<DecreaseQuantityEvent>(_decreaseQuantity);
     on<RemoveItemEvent>(_removeItem);
@@ -19,7 +20,12 @@ class ProductBloc extends HydratedBloc<ProductEvent, ProductState> {
     on<AddToCartEvent>(_addToCart);
   }
 
-  final StoreRepository repository;
+  getAllProducts(StoreRepository repository) async {
+    try {
+      final List<Product>? products = await repository.getAllProducts();
+      emit(ProductState(productList: products));
+    } catch (e) {}
+  }
 
   void _increaseQuantity(
       IncreaseQuantityEvent event, Emitter<ProductState> emit) {

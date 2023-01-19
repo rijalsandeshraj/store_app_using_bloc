@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:store_app_using_bloc/core/constants/bottom_navigation_bar_items.dart';
-import 'package:store_app_using_bloc/presentation/screens/products_screen.dart';
+import 'package:store_app_using_bloc/presentation/screens/home_screen/home_screen.dart';
 
 import '../animations/page_transition.dart';
 
@@ -17,7 +17,7 @@ class _LandingScreenState extends State<LandingScreen> {
   int currentIndex = 0;
 
   final List<Widget> screens = [
-    const ProductsScreen(),
+    const HomeScreen(),
     // const CartScreen(),
     // const FavoriteScreen(),
     // const ProfileScreen()
