@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:store_app_using_bloc/core/constants/colors.dart';
 import 'package:store_app_using_bloc/core/constants/text_styles.dart';
-import 'package:store_app_using_bloc/presentation/screens/home_screen/product_categories_widget.dart';
 import 'package:store_app_using_bloc/presentation/screens/home_screen/products_screen.dart';
 import 'package:store_app_using_bloc/presentation/widgets/custom_app_bar.dart';
 
+import '../../../core/constants/product_categories.dart';
+import '../../../data/models/category.dart';
 import '../../widgets/app_bar_icon_widget.dart';
 import 'popular_products_section.dart';
+
+String productCategoryTitle = 'All';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -160,14 +163,66 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-            const ProductCategoriesWidget(),
+            Container(
+              height: 42,
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  Category productCategory = productCategories[index];
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        productCategoryTitle = productCategory.title;
+                        productsScreenLoaded = true;
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: AppColor.white,
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            productCategory.iconData,
+                            color: productCategoryTitle == productCategory.title
+                                ? AppColor.primaryPink
+                                : AppColor.grey,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            productCategory.title,
+                            style: productCategoryTitle == productCategory.title
+                                ? selectedCategoryTextStyle
+                                : secondaryTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
             Row(
               children: <Widget>[
-                const Text('Popular', style: primaryTextStyle),
+                Text(
+                    productCategoryTitle == '' && productsScreenLoaded == false
+                        ? 'Popular'
+                        : productCategoryTitle == 'All'
+                            ? 'All Products'
+                            : productCategoryTitle,
+                    style: primaryTextStyle),
                 const Spacer(),
                 InkWell(
                   onTap: () {
                     setState(() {
+                      productCategoryTitle = 'All Products';
                       productsScreenLoaded = true;
                     });
                   },

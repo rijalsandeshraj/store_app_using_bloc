@@ -8,9 +8,6 @@ class ProductState extends Equatable {
     this.productList,
   });
 
-  const ProductState.initial(List<Product>? productList)
-      : this(productList: productList);
-
   @override
   List<Object?> get props => [productList];
 

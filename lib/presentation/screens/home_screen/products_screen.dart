@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:store_app_using_bloc/core/utils/show_custom_snack_bar.dart';
 
-import '../../../bloc/product/product_bloc.dart';
+import '../../../bloc/all_products/all_products_bloc.dart';
 import '../../../data/models/product.dart';
 
 class ProductsScreen extends StatefulWidget {
@@ -14,20 +15,23 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<AllProductsBloc>(context).add(GetAllProductsEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<ProductBloc, ProductState>(
+      body: BlocBuilder<AllProductsBloc, AllProductsState>(
         builder: (context, state) {
-          if (state.productList == null) {
-            print('if');
+          if (state is AllProductsLoadingState) {
             return Center(
                 child: SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
                     child: Lottie.asset('assets/animations/loading.json')));
-          } else {
+          } else if (state is AllProductsLoadedState) {
             List<Product> productsList = state.productList!;
-            setState(() {});
-            print('else');
             return GridView.builder(
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -47,6 +51,17 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 );
               },
             );
+          } else if (state is AllProductsErrorState) {
+            showCustomSnackBar(context, state.error);
+            return Center(
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: Lottie.asset('assets/animations/loading.json')));
+          } else {
+            return Center(
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: Lottie.asset('assets/animations/loading.json')));
           }
         },
       ),
