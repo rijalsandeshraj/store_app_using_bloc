@@ -31,23 +31,37 @@ const TextStyle sectionActionTextStyle = TextStyle(
 );
 
 // TextStyles for OrderScreen
-const TextStyle productTitleTextStyle = TextStyle(
+const TextStyle productTitle1TextStyle = TextStyle(
   fontWeight: FontWeight.normal,
   fontSize: 12,
   color: AppColor.black80,
 );
 
 // TextStyles for OrderScreen
-const TextStyle productPriceTextStyle = TextStyle(
+const TextStyle productTitle2TextStyle = TextStyle(
+  fontWeight: FontWeight.w500,
+  fontSize: 14,
+  color: Color.fromARGB(221, 114, 112, 112),
+);
+
+// TextStyles for OrderScreen
+const TextStyle productPrice1TextStyle = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 12,
   color: AppColor.black87,
 );
 
-const TextStyle orderStatusTextStyle = TextStyle(
-  fontWeight: FontWeight.normal,
-  color: AppColor.black80,
-  fontSize: 8,
+// TextStyles for OrderScreen
+const TextStyle productPrice2TextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  fontSize: 16,
+  color: AppColor.black87,
+);
+
+const TextStyle dollarSignTextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  color: AppColor.black87,
+  fontSize: 9,
 );
 
 const TextStyle tableHeaderTextStyle1 = TextStyle(

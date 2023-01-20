@@ -22,7 +22,7 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
       final List<Product>? products = await repository.getAllProducts();
       emit(AllProductsLoadedState(productList: products));
     } catch (e) {
-      emit(AllProductsErrorState('Server connection Failed!'));
+      emit(AllProductsErrorState(e.toString().replaceAll('Exception: ', '')));
     }
   }
 }

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:store_app_using_bloc/bloc/all_products/all_products_bloc.dart';
 import 'package:store_app_using_bloc/presentation/screens/landing_screen.dart';
-
-import 'bloc/all_products/all_products_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

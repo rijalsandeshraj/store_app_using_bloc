@@ -78,7 +78,7 @@ class _PopularProductsSectionState extends State<PopularProductsSection> {
                             horizontal: 8, vertical: 4),
                         child: Text(
                           'Product ${index + 1}',
-                          style: productTitleTextStyle,
+                          style: productTitle1TextStyle,
                         ),
                       ),
                     ),
@@ -94,7 +94,7 @@ class _PopularProductsSectionState extends State<PopularProductsSection> {
                             horizontal: 8, vertical: 4),
                         child: Text(
                           '\$ $randomNumber',
-                          style: productPriceTextStyle,
+                          style: productPrice1TextStyle,
                         ),
                       ),
                     ),

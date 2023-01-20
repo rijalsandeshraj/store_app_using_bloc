@@ -32,10 +32,11 @@ class ApiServices {
         return jsonDecode(response.body);
       }
     } on SocketException {
-      if (context != null) {
-        showCustomSnackBar(context!, 'Server Connection Failed!',
-            taskSuccess: false);
-      }
+      throw Exception('Server Connection Failed!');
+      // if (context != null) {
+      //   showCustomSnackBar(context!, 'Server Connection Failed!',
+      //       taskSuccess: false);
+      // }
     } on TimeoutException {
       if (context != null) {
         showCustomSnackBar(context!, 'Connection Timed Out!',
