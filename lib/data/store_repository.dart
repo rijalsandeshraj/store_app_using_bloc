@@ -7,6 +7,7 @@ import 'store_api_provider.dart';
 class StoreRepository {
   static final StoreRepository _storeRepository = StoreRepository._();
   final storeApiProvider = StoreApiProvider();
+  List<Product>? products;
 
   StoreRepository._();
 
@@ -15,10 +16,12 @@ class StoreRepository {
   }
 
   // Gets all products from the API
-  Future<List<Product>?> getAllProducts() async =>
-      await storeApiProvider.getAllProducts();
+  Future<void> getAllProducts() async {
+    var data = await storeApiProvider.getAllProducts();
+    products = data;
+  }
 
   get allProducts {
-    getAllProducts();
+    return products;
   }
 }

@@ -9,7 +9,7 @@ import '../../../data/models/category.dart';
 import '../../widgets/app_bar_icon_widget.dart';
 import 'popular_products_section.dart';
 
-String productCategoryTitle = 'All';
+String productCategoryTitle = 'All Products';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(0),
                 icon: const Icon(
                   Icons.shopping_basket_rounded,
-                  color: AppColor.primaryPink,
+                  color: AppColor.grey,
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -180,7 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         setState(() {
                           productCategoryTitle = productCategory.title;
-                          productsScreenLoaded = true;
+                          if (!productsScreenLoaded) {
+                            productsScreenLoaded = true;
+                          }
                         });
                       },
                       child: Container(
@@ -202,7 +204,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              productCategory.title,
+                              productCategory.title == 'All Products'
+                                  ? 'All'
+                                  : productCategory.title,
                               style:
                                   productCategoryTitle == productCategory.title
                                       ? selectedCategoryTextStyle
@@ -226,7 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   InkWell(
                     onTap: () {
                       setState(() {
-                        productCategoryTitle = 'All Products';
                         productsScreenLoaded = true;
                       });
                     },

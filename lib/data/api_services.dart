@@ -2,13 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:store_app_using_bloc/presentation/screens/landing_screen.dart';
-
-import '../core/utils/show_custom_snack_bar.dart';
-
-BuildContext? context = scaffoldKey.currentState?.context;
 
 class ApiServices {
   var client = http.Client();
@@ -33,15 +27,8 @@ class ApiServices {
       }
     } on SocketException {
       throw Exception('Server Connection Failed!');
-      // if (context != null) {
-      //   showCustomSnackBar(context!, 'Server Connection Failed!',
-      //       taskSuccess: false);
-      // }
     } on TimeoutException {
-      if (context != null) {
-        showCustomSnackBar(context!, 'Connection Timed Out!',
-            taskSuccess: false);
-      }
+      throw Exception('Connection Timed Out!');
     } catch (e) {
       log('Error: ${e.toString()}');
     }
@@ -60,15 +47,9 @@ class ApiServices {
         return jsonDecode(response.body);
       }
     } on SocketException {
-      if (context != null) {
-        showCustomSnackBar(context!, 'Server Connection Failed!',
-            taskSuccess: false);
-      }
+      throw Exception('Server Connection Failed!');
     } on TimeoutException {
-      if (context != null) {
-        showCustomSnackBar(context!, 'Connection Timed Out!',
-            taskSuccess: false);
-      }
+      throw Exception('Connection Timed Out!');
     } catch (e) {
       log('Error: ${e.toString()}');
     }

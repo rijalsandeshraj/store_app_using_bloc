@@ -8,3 +8,12 @@ class GetAllProductsEvent extends AllProductsEvent {
   @override
   List<Object?> get props => [];
 }
+
+class AddToCartEvent extends AllProductsEvent {
+  const AddToCartEvent(this.product);
+
+  final Product product;
+
+  @override
+  List<Object?> get props => [product];
+}

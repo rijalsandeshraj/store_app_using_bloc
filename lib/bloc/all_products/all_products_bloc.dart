@@ -11,18 +11,36 @@ part 'all_products_state.dart';
 
 class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
   AllProductsBloc() : super(AllProductsLoadingState()) {
-    on<AllProductsEvent>(_getAllProducts);
+    on<GetAllProductsEvent>(_getAllProducts);
+    on<AddToCartEvent>(_addToCart);
   }
 
   void _getAllProducts(
-      AllProductsEvent event, Emitter<AllProductsState> emit) async {
+      GetAllProductsEvent event, Emitter<AllProductsState> emit) async {
     emit(AllProductsLoadingState());
     StoreRepository repository = StoreRepository();
     try {
-      final List<Product>? products = await repository.getAllProducts();
-      emit(AllProductsLoadedState(productList: products));
+      await repository.getAllProducts();
+      emit(AllProductsLoadedState(productList: repository.allProducts));
     } catch (e) {
       emit(AllProductsErrorState(e.toString().replaceAll('Exception: ', '')));
+    }
+  }
+
+  void _addToCart(AddToCartEvent event, Emitter<AllProductsState> emit) {
+    final state = this.state;
+
+    if (state is AllProductsLoadedState) {
+      int index = state.productList!.indexOf(event.product);
+
+      final List<Product> cartProducts = state.productList!.map((element) {
+        if (element.id == event.product.id) {
+          return state.productList![index].copyWith(addedToCart: true);
+        }
+        return element;
+      }).toList();
+
+      emit(AllProductsLoadedState(productList: cartProducts));
     }
   }
 }

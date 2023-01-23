@@ -76,6 +76,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 maxLines: 2,
                                 style: productTitle2TextStyle,
                               ),
+                              const SizedBox(height: 2),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -95,18 +96,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         ),
                       ),
                       Positioned(
+                        top: 10,
                         bottom: 75,
                         child: SizedBox(
                           width: widget.titleContainerWidth - 10,
                           child: CachedNetworkImage(
                             imageUrl: product.image!,
                             fit: BoxFit.contain,
-                            placeholder: (context, url) => const FittedBox(
+                            placeholder: (context, url) => FittedBox(
                               child: SizedBox(
                                 height: 30,
                                 width: 30,
                                 child: CircularProgressIndicator(
-                                  color: AppColor.primaryPink,
+                                  color: AppColor.primaryPink.withOpacity(0.3),
                                 ),
                               ),
                             ),
