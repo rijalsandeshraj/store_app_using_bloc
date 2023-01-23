@@ -10,10 +10,46 @@ class GetAllProductsEvent extends AllProductsEvent {
 }
 
 class AddToCartEvent extends AllProductsEvent {
-  const AddToCartEvent(this.product);
+  const AddToCartEvent(this.id);
 
-  final Product product;
+  final int id;
 
   @override
-  List<Object?> get props => [product];
+  List<Object?> get props => [id];
+}
+
+class AddToFavoritesEvent extends AllProductsEvent {
+  const AddToFavoritesEvent(this.id);
+
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class RemoveFromFavoritesEvent extends AllProductsEvent {
+  const RemoveFromFavoritesEvent(this.id);
+
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class IncreaseQuantityEvent extends AllProductsEvent {
+  const IncreaseQuantityEvent(this.id);
+
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class DecreaseQuantityEvent extends AllProductsEvent {
+  const DecreaseQuantityEvent(this.id);
+
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
 }

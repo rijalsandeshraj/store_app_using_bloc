@@ -3,8 +3,7 @@ import 'package:store_app_using_bloc/core/constants/bottom_navigation_bar_items.
 import 'package:store_app_using_bloc/presentation/screens/home_screen/home_screen.dart';
 
 import '../animations/page_transition.dart';
-
-GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+import 'cart_screen/cart_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -18,7 +17,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   final List<Widget> screens = [
     const HomeScreen(),
-    // const CartScreen(),
+    const CartScreen(),
     // const FavoriteScreen(),
     // const ProfileScreen()
   ];
@@ -26,14 +25,15 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       body: PageTransition(
         child: screens[currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (int index) {
-          currentIndex = index;
+          setState(() {
+            currentIndex = index;
+          });
         },
         selectedFontSize: 0,
         items: bottomNavigationBarItems,

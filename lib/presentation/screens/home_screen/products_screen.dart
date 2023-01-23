@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:store_app_using_bloc/core/utils/show_custom_snack_bar.dart';
+import 'package:store_app_using_bloc/presentation/screens/home_screen/home_screen.dart';
 
 import '../../../bloc/all_products/all_products_bloc.dart';
 import '../../../core/constants/colors.dart';
@@ -38,7 +39,38 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     width: MediaQuery.of(context).size.width / 3,
                     child: Lottie.asset('assets/animations/loading.json')));
           } else if (state is AllProductsLoadedState) {
-            List<Product> productsList = state.productList!;
+            List<Product> productsList = [];
+            switch (productCategoryTitle) {
+              case 'All Products':
+                productsList = state.productList!;
+                break;
+              case 'Electronics':
+                productsList = state.productList!
+                    .where(
+                        (e) => e.category == productCategoryTitle.toLowerCase())
+                    .toList();
+                break;
+              case 'Jewellery':
+                productsList = state.productList!
+                    .where((e) => e.category == 'jewelery')
+                    .toList();
+                break;
+              case 'Men\'s Clothing':
+                productsList = state.productList!
+                    .where(
+                        (e) => e.category == productCategoryTitle.toLowerCase())
+                    .toList();
+                break;
+              case 'Women\'s Clothing':
+                productsList = state.productList!
+                    .where(
+                        (e) => e.category == productCategoryTitle.toLowerCase())
+                    .toList();
+                break;
+              default:
+                productsList = state.productList!;
+                break;
+            }
             return GridView.builder(
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
@@ -112,24 +144,33 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 ),
                               ),
                             ),
-                            // errorWidget: (context, url, error) => Center(
-                            //   child:
-                            //       Image.asset('assets/logo.png', height: 150),
-                            // ),
+                            errorWidget: (context, url, error) => Center(
+                              child: Image.asset(
+                                  'assets/no_image_available.jpg',
+                                  height: widget.titleContainerWidth),
+                            ),
                           ),
                         ),
                       ),
                       Positioned(
                         right: 10,
                         bottom: 10,
-                        child: Container(
-                          padding: const EdgeInsets.all(3),
-                          decoration: const BoxDecoration(
-                              color: AppColor.primaryPink,
-                              shape: BoxShape.circle),
-                          child: const Icon(
-                            Icons.add_rounded,
-                            color: AppColor.white,
+                        child: GestureDetector(
+                          onTap: () {
+                            context
+                                .read<AllProductsBloc>()
+                                .add(AddToCartEvent(product.id!));
+                            showCustomSnackBar(context, 'Added to Cart!');
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: const BoxDecoration(
+                                color: AppColor.primaryPink,
+                                shape: BoxShape.circle),
+                            child: const Icon(
+                              Icons.add_rounded,
+                              color: AppColor.white,
+                            ),
                           ),
                         ),
                       ),
@@ -138,9 +179,24 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         right: 0,
                         child: IconButton(
                           padding: EdgeInsets.zero,
-                          icon: const Icon(Icons.favorite_rounded),
+                          icon: Icon(product.isFavorite
+                              ? Icons.favorite_rounded
+                              : Icons.favorite_border_rounded),
                           color: AppColor.red,
-                          onPressed: () {},
+                          onPressed: product.isFavorite
+                              ? () {
+                                  context.read<AllProductsBloc>().add(
+                                      RemoveFromFavoritesEvent(product.id!));
+                                  showCustomSnackBar(
+                                      context, 'Removed from Favorites!');
+                                }
+                              : () {
+                                  context
+                                      .read<AllProductsBloc>()
+                                      .add(AddToFavoritesEvent(product.id!));
+                                  showCustomSnackBar(
+                                      context, 'Added to Favorites!');
+                                },
                         ),
                       ),
                     ],
@@ -149,18 +205,40 @@ class _ProductsScreenState extends State<ProductsScreen> {
               },
             );
           } else if (state is AllProductsErrorState) {
+            String error = state.error;
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              showCustomSnackBar(context, state.error, taskSuccess: false);
+              showCustomSnackBar(context, error, taskSuccess: false);
             });
             return Center(
-                child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Lottie.asset('assets/animations/loading.json')));
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '$error\n\nRetry',
+                  style: errorTextStyle,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                CircleAvatar(
+                  radius: widget.titleContainerWidth - 100,
+                  backgroundColor: AppColor.white.withOpacity(0.6),
+                  child: IconButton(
+                    icon: const Icon(Icons.rotate_right_rounded),
+                    color: AppColor.green,
+                    iconSize: 40,
+                    onPressed: () => context
+                        .read<AllProductsBloc>()
+                        .add(GetAllProductsEvent()),
+                  ),
+                ),
+              ],
+            ));
           } else {
-            return Center(
-                child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Lottie.asset('assets/animations/loading.json')));
+            return const Center(
+                child: Text(
+              'An error occurred!',
+              style: errorTextStyle,
+            ));
           }
         },
       ),

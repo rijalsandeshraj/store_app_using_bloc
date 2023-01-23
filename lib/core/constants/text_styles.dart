@@ -9,6 +9,13 @@ const TextStyle primaryTextStyle = TextStyle(
   fontSize: 20,
 );
 
+// TextStyle for primary headings
+const TextStyle errorTextStyle = TextStyle(
+  fontWeight: FontWeight.w500,
+  color: AppColor.red,
+  fontSize: 20,
+);
+
 // TextStyle for secondary text
 const TextStyle secondaryTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
@@ -72,9 +79,9 @@ const TextStyle tableHeaderTextStyle1 = TextStyle(
 
 // TextStyles for InvoiceScreen
 const TextStyle normalTextStyle2 = TextStyle(
-  fontWeight: FontWeight.normal,
-  color: AppColor.black87,
-  fontSize: 12,
+  fontWeight: FontWeight.w500,
+  color: AppColor.white,
+  fontSize: 14,
 );
 
 const TextStyle tableHeaderTextStyle2 = TextStyle(

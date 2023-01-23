@@ -12,7 +12,11 @@ part 'all_products_state.dart';
 class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
   AllProductsBloc() : super(AllProductsLoadingState()) {
     on<GetAllProductsEvent>(_getAllProducts);
+    on<AddToFavoritesEvent>(_addToFavorites);
+    on<RemoveFromFavoritesEvent>(_removeFromFavorites);
     on<AddToCartEvent>(_addToCart);
+    on<IncreaseQuantityEvent>(_increaseQuantity);
+    on<DecreaseQuantityEvent>(_decreaseQuantity);
   }
 
   void _getAllProducts(
@@ -27,20 +31,125 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
     }
   }
 
-  void _addToCart(AddToCartEvent event, Emitter<AllProductsState> emit) {
+  void _addToFavorites(
+      AddToFavoritesEvent event, Emitter<AllProductsState> emit) {
     final state = this.state;
 
     if (state is AllProductsLoadedState) {
-      int index = state.productList!.indexOf(event.product);
-
-      final List<Product> cartProducts = state.productList!.map((element) {
-        if (element.id == event.product.id) {
-          return state.productList![index].copyWith(addedToCart: true);
+      final List<Product> products = state.productList!.map((element) {
+        if (element.id == event.id) {
+          element = element.copyWith(isFavorite: true);
         }
         return element;
       }).toList();
 
-      emit(AllProductsLoadedState(productList: cartProducts));
+      emit(state.copyWith(productList: products));
     }
+  }
+
+  void _removeFromFavorites(
+      RemoveFromFavoritesEvent event, Emitter<AllProductsState> emit) {
+    final state = this.state;
+
+    if (state is AllProductsLoadedState) {
+      final List<Product> products = state.productList!.map((element) {
+        if (element.id == event.id) {
+          element = element.copyWith(isFavorite: false);
+        }
+        return element;
+      }).toList();
+
+      emit(state.copyWith(productList: products));
+    }
+  }
+
+  void _addToCart(AddToCartEvent event, Emitter<AllProductsState> emit) {
+    final state = this.state;
+
+    if (state is AllProductsLoadedState) {
+      final List<Product> products = state.productList!.map((element) {
+        if (element.id == event.id) {
+          element = element.copyWith(addedToCart: true);
+        }
+        return element;
+      }).toList();
+
+      emit(state.copyWith(productList: products));
+    }
+  }
+
+  void _increaseQuantity(
+      IncreaseQuantityEvent event, Emitter<AllProductsState> emit) {
+    final state = this.state;
+
+    if (state is AllProductsLoadedState) {
+      int quantity = state.productList!
+          .firstWhere((element) => element.id == event.id)
+          .quantity;
+      final List<Product> products = state.productList!.map((element) {
+        if (element.id == event.id) {
+          element = element.copyWith(quantity: quantity + 1);
+        }
+        return element;
+      }).toList();
+
+      emit(state.copyWith(productList: products));
+    }
+  }
+
+  void _decreaseQuantity(
+      DecreaseQuantityEvent event, Emitter<AllProductsState> emit) {
+    final state = this.state;
+
+    if (state is AllProductsLoadedState) {
+      int quantity = state.productList!
+          .firstWhere((element) => element.id == event.id)
+          .quantity;
+      final List<Product> products = state.productList!.map((element) {
+        if (element.id == event.id) {
+          element = element.copyWith(quantity: quantity - 1);
+        }
+        return element;
+      }).toList();
+
+      emit(state.copyWith(productList: products));
+    }
+  }
+
+  String pricePerEachItem(Product product) {
+    double price = 0;
+    price = product.quantity * product.price!;
+    return price.toStringAsFixed(2);
+  }
+
+  double get getTotalPrice {
+    double totalPrice = 5;
+    List<Product> cartProducts = getCartProducts;
+
+    for (var element in cartProducts) {
+      totalPrice += element.quantity * element.price!;
+    }
+
+    return totalPrice;
+  }
+
+  get getCartProducts {
+    final state = this.state;
+    if (state is AllProductsLoadedState) {
+      List<Product> cartProducts =
+          state.productList!.where((element) => element.addedToCart).toList();
+      return cartProducts;
+    }
+    return <Product>[];
+  }
+
+  get getFavoriteProducts {
+    final state = this.state;
+    if (state is AllProductsLoadedState) {
+      List<Product> favoriteProducts =
+          state.productList!.where((element) => element.addedToCart).toList();
+      return favoriteProducts;
+    }
+    return <Product>[];
   }
 }

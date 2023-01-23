@@ -231,6 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       setState(() {
                         productsScreenLoaded = true;
+                        productCategoryTitle = 'All Products';
                       });
                     },
                     child: Row(

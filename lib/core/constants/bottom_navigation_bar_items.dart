@@ -5,6 +5,7 @@ List<BottomNavigationBarItem> bottomNavigationBarItems = [
     label: '',
     icon: IconButton(
       icon: const Icon(Icons.home_rounded),
+      color: Colors.green,
       onPressed: () {},
     ),
   ),
@@ -12,6 +13,7 @@ List<BottomNavigationBarItem> bottomNavigationBarItems = [
     label: '',
     icon: IconButton(
       icon: const Icon(Icons.favorite_rounded),
+      color: Colors.green,
       onPressed: () {},
     ),
   ),
@@ -19,6 +21,7 @@ List<BottomNavigationBarItem> bottomNavigationBarItems = [
     label: '',
     icon: IconButton(
       icon: const Icon(Icons.shopping_basket_rounded),
+      color: Colors.green,
       onPressed: () {},
     ),
   ),
