@@ -78,7 +78,14 @@ const TextStyle tableHeaderTextStyle1 = TextStyle(
 );
 
 // TextStyles for InvoiceScreen
-const TextStyle normalTextStyle2 = TextStyle(
+const TextStyle cartScreenPriceTextStyle = TextStyle(
+  fontWeight: FontWeight.normal,
+  color: AppColor.white,
+  fontSize: 16,
+);
+
+// TextStyles for InvoiceScreen
+const TextStyle cartScreenCalculationTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: AppColor.white,
   fontSize: 14,

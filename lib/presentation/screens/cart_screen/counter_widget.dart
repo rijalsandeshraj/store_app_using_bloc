@@ -24,7 +24,7 @@ class CounterWidget extends StatelessWidget {
           width: 27,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColor.primaryPink.withOpacity(0.8),
+            color: AppColor.primaryPink.withOpacity(0.9),
             shape: BoxShape.circle,
           ),
           child: IconButton(
@@ -50,7 +50,7 @@ class CounterWidget extends StatelessWidget {
           width: 27,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColor.primaryPink.withOpacity(0.8),
+            color: AppColor.primaryPink.withOpacity(0.9),
             shape: BoxShape.circle,
           ),
           child: IconButton(

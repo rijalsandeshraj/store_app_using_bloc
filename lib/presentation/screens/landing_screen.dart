@@ -4,6 +4,7 @@ import 'package:store_app_using_bloc/presentation/screens/home_screen/home_scree
 
 import '../animations/page_transition.dart';
 import 'cart_screen/cart_screen.dart';
+import 'favorite_screen/favorite_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -17,8 +18,8 @@ class _LandingScreenState extends State<LandingScreen> {
 
   final List<Widget> screens = [
     const HomeScreen(),
+    const FavoriteScreen(),
     const CartScreen(),
-    // const FavoriteScreen(),
     // const ProfileScreen()
   ];
 

@@ -17,6 +17,7 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
     on<AddToCartEvent>(_addToCart);
     on<IncreaseQuantityEvent>(_increaseQuantity);
     on<DecreaseQuantityEvent>(_decreaseQuantity);
+    on<RemoveFromCartEvent>(_removeFromCart);
   }
 
   void _getAllProducts(
@@ -116,10 +117,20 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
     }
   }
 
-  String pricePerEachItem(Product product) {
-    double price = 0;
-    price = product.quantity * product.price!;
-    return price.toStringAsFixed(2);
+  void _removeFromCart(
+      RemoveFromCartEvent event, Emitter<AllProductsState> emit) {
+    final state = this.state;
+
+    if (state is AllProductsLoadedState) {
+      final List<Product> products = state.productList!.map((element) {
+        if (element.id == event.id) {
+          element = element.copyWith(addedToCart: false);
+        }
+        return element;
+      }).toList();
+
+      emit(state.copyWith(productList: products));
+    }
   }
 
   double get getTotalPrice {
@@ -147,7 +158,7 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
     final state = this.state;
     if (state is AllProductsLoadedState) {
       List<Product> favoriteProducts =
-          state.productList!.where((element) => element.addedToCart).toList();
+          state.productList!.where((element) => element.isFavorite).toList();
       return favoriteProducts;
     }
     return <Product>[];

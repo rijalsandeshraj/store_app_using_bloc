@@ -53,3 +53,12 @@ class DecreaseQuantityEvent extends AllProductsEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class RemoveFromCartEvent extends AllProductsEvent {
+  const RemoveFromCartEvent(this.id);
+
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
+}

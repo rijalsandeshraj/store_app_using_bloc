@@ -23,6 +23,7 @@ dependencies:
   flutter_bloc: ^8.1.1
   cached_network_image: ^3.2.3
   simple_animations: ^5.0.0+3
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -36,3 +37,4 @@ flutter:
   assets:
     - assets/images/
     - assets/animations/
+    - assets/icons/

@@ -8,19 +8,17 @@ import 'package:store_app_using_bloc/presentation/widgets/custom_app_bar.dart';
 
 import '../../../core/constants/text_styles.dart';
 import '../../../data/models/product.dart';
-import 'cart_product_widget.dart';
-import 'total_amount_widget.dart';
+import 'favorite_product_widget.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({Key? key}) : super(key: key);
+class FavoriteScreen extends StatelessWidget {
+  const FavoriteScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-    final List<Product> cartProducts =
-        context.watch<AllProductsBloc>().getCartProducts;
-    final double totalPrice = context.read<AllProductsBloc>().getTotalPrice;
+    final List<Product> favoriteProducts =
+        context.watch<AllProductsBloc>().getFavoriteProducts;
 
     return Scaffold(
       backgroundColor: AppColor.scaffoldBackground,
@@ -37,36 +35,45 @@ class CartScreen extends StatelessWidget {
                 color: AppColor.white,
               ),
               child: Text(
-                cartProducts.length.toString(),
+                favoriteProducts.length.toString(),
                 style: selectedCategoryTextStyle,
               ),
             ),
           ),
         ),
         title: const Text(
-          'My Cart',
+          'Favorites',
           style: primaryTextStyle,
         ),
       ),
-      bottomNavigationBar: cartProducts.isEmpty
-          ? null
-          : TotalAmountWidget(
-              totalPrice: totalPrice, containerWidth: deviceWidth * 0.48),
       body: SafeArea(
-        child: cartProducts.isEmpty
+        child: favoriteProducts.isEmpty
             ? Center(
-                child: SizedBox(
-                    height: deviceHeight / 2,
-                    child: Lottie.asset('assets/animations/empty_cart.json')))
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                        height: deviceHeight / 2.5,
+                        child: Lottie.asset(
+                            'assets/animations/empty_favorites.json')),
+                    Text(
+                      'No Items Added\nto Favorites',
+                      style: primaryTextStyle.copyWith(color: AppColor.red),
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                ),
+              )
             : ListView.separated(
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.all(20),
                 shrinkWrap: true,
-                itemCount: cartProducts.length,
+                itemCount: favoriteProducts.length,
                 itemBuilder: (_, index) {
-                  Product cartProduct = cartProducts[index];
-                  return CartProductWidget(
-                          cartProduct: cartProduct, deviceWidth: deviceWidth)
+                  Product favoriteProduct = favoriteProducts[index];
+                  return FavoriteProductWidget(
+                          favoriteProduct: favoriteProduct,
+                          deviceWidth: deviceWidth)
                       .fadeAnimation(index * 0.6);
                 },
                 separatorBuilder: (BuildContext context, int index) {

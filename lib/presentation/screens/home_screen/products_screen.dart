@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:store_app_using_bloc/core/utils/show_custom_snack_bar.dart';
+import 'package:store_app_using_bloc/data/store_repository.dart';
 import 'package:store_app_using_bloc/presentation/screens/home_screen/home_screen.dart';
 
 import '../../../bloc/all_products/all_products_bloc.dart';
@@ -24,7 +25,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<AllProductsBloc>(context).add(GetAllProductsEvent());
+    if (!productsFetched) {
+      BlocProvider.of<AllProductsBloc>(context).add(GetAllProductsEvent());
+    }
   }
 
   @override
@@ -156,12 +159,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         right: 10,
                         bottom: 10,
                         child: GestureDetector(
-                          onTap: () {
-                            context
-                                .read<AllProductsBloc>()
-                                .add(AddToCartEvent(product.id!));
-                            showCustomSnackBar(context, 'Added to Cart!');
-                          },
+                          onTap: product.addedToCart
+                              ? () {
+                                  showCustomSnackBar(
+                                      context, 'Item Already Added to Cart!');
+                                }
+                              : () {
+                                  context
+                                      .read<AllProductsBloc>()
+                                      .add(AddToCartEvent(product.id!));
+
+                                  showCustomSnackBar(
+                                      context, 'Item Added to Cart!');
+                                },
                           child: Container(
                             padding: const EdgeInsets.all(3),
                             decoration: const BoxDecoration(
@@ -188,14 +198,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   context.read<AllProductsBloc>().add(
                                       RemoveFromFavoritesEvent(product.id!));
                                   showCustomSnackBar(
-                                      context, 'Removed from Favorites!');
+                                      context, 'Item Removed from Favorites!');
                                 }
                               : () {
                                   context
                                       .read<AllProductsBloc>()
                                       .add(AddToFavoritesEvent(product.id!));
                                   showCustomSnackBar(
-                                      context, 'Added to Favorites!');
+                                      context, 'Item Added to Favorites!');
                                 },
                         ),
                       ),
@@ -214,10 +224,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '$error\n\nRetry',
+                  error,
                   style: errorTextStyle,
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 10),
+                const Text('Retry',
+                    style: errorTextStyle, textAlign: TextAlign.center),
                 const SizedBox(height: 10),
                 CircleAvatar(
                   radius: widget.titleContainerWidth - 100,

@@ -11,6 +11,8 @@ import 'popular_products_section.dart';
 
 String productCategoryTitle = 'All Products';
 
+bool productsScreenLoaded = false;
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -18,15 +20,17 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  bool productsScreenLoaded = false;
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin<HomeScreen> {
+  @override
+  bool get wantKeepAlive => true;
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
     double deviceHeight = deviceSize.height;
     double deviceWidth = deviceSize.width;
-    // double topPadding = MediaQuery.of(context).padding.top;
 
     return RawKeyboardListener(
       focusNode: FocusNode(),
@@ -147,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              if (productsScreenLoaded == false)
+              if (!productsScreenLoaded)
                 Container(
                   constraints: const BoxConstraints(
                       minHeight: 134, minWidth: double.infinity),
