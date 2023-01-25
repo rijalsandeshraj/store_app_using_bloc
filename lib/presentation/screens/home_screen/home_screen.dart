@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:store_app_using_bloc/core/constants/colors.dart';
 import 'package:store_app_using_bloc/core/constants/text_styles.dart';
 import 'package:store_app_using_bloc/presentation/screens/home_screen/products_screen.dart';
 import 'package:store_app_using_bloc/presentation/widgets/custom_app_bar.dart';
 
+import '../../../bloc/all_products/all_products_bloc.dart';
 import '../../../core/constants/product_categories.dart';
 import '../../../data/models/category.dart';
 import '../../widgets/app_bar_icon_widget.dart';
@@ -64,16 +66,49 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           actions: [
             AppBarIconWidget(
-              child: IconButton(
-                padding: const EdgeInsets.all(0),
-                icon: const Icon(
-                  Icons.shopping_basket_rounded,
-                  color: AppColor.grey,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  IconButton(
+                    padding: const EdgeInsets.all(0),
+                    icon: const Icon(
+                      Icons.shopping_basket_rounded,
+                      color: AppColor.grey,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    tooltip: 'Navigate to Cart Screen',
+                  ),
+                  Positioned(
+                    top: 12,
+                    right: 7,
+                    child:
+                        BlocSelector<AllProductsBloc, AllProductsState, bool>(
+                      selector: (state) {
+                        if (state is AllProductsLoadedState) {
+                          if (state.productList!
+                              .any((element) => element.addedToCart)) {
+                            return true;
+                          }
+                        }
+                        return false;
+                      },
+                      builder: (context, itemsAddedToCart) {
+                        return itemsAddedToCart
+                            ? Container(
+                                height: 7,
+                                width: 7,
+                                decoration: const BoxDecoration(
+                                  color: AppColor.primaryPink,
+                                  shape: BoxShape.circle,
+                                ),
+                              )
+                            : Container();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(width: 10),

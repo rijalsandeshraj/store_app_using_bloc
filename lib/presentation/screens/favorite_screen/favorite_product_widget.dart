@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:lottie/lottie.dart';
 import 'package:store_app_using_bloc/core/utils/show_custom_snack_bar.dart';
 
 import '../../../bloc/all_products/all_products_bloc.dart';
 import '../../../core/constants/colors.dart';
+import '../../../core/constants/snack_bar_messages.dart';
 import '../../../core/constants/text_styles.dart';
 import '../../../data/models/product.dart';
 
@@ -37,11 +41,31 @@ class FavoriteProductWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
-              width: 80,
-              height: 80,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(favoriteProduct.image!))),
+            width: 80,
+            height: 80,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: favoriteProduct.image!,
+                fit: BoxFit.contain,
+                placeholder: (context, url) => FittedBox(
+                  child: SizedBox(
+                    height: 80,
+                    width: 80,
+                    child:
+                        Lottie.asset('/assets/animations/image_loading.json'),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Center(
+                  child: Image.asset(
+                    'assets/images/no_image_available.jpg',
+                    height: 80,
+                    width: 80,
+                  ),
+                ),
+              ),
+            ),
+          ),
           const SizedBox(width: 10),
           SizedBox(
             width: deviceWidth / 2.3,
@@ -55,23 +79,28 @@ class FavoriteProductWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 5),
-                // RatingBarIndicator(
-                //   direction: Axis.horizontal,
-                //   rating: favoriteProduct.rating!.rate ?? 0.0,
-                //   itemCount: 5,
-                //   itemPadding: const EdgeInsets.symmetric(horizontal: 0),
-                //   itemBuilder: (context, _) => const FittedBox(
-                //     child: SizedBox(
-                //       height: 3,
-                //       width: 3,
-                //       child: Icon(
-                //         Icons.star,
-                //         size: 3,
-                //         color: Colors.amber,
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                RatingBar(
+                  initialRating: favoriteProduct.rating!.rate ?? 0,
+                  direction: Axis.horizontal,
+                  itemCount: 5,
+                  itemSize: 15,
+                  allowHalfRating: true,
+                  ignoreGestures: true,
+                  ratingWidget: RatingWidget(
+                      full: const Icon(
+                        Icons.star,
+                        color: Colors.orange,
+                      ),
+                      half: const Icon(
+                        Icons.star_half,
+                        color: Colors.orange,
+                      ),
+                      empty: const Icon(
+                        Icons.star_outline,
+                        color: Colors.orange,
+                      )),
+                  onRatingUpdate: (value) {},
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -104,7 +133,7 @@ class FavoriteProductWidget extends StatelessWidget {
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
                                     showCustomSnackBar(
-                                        context, 'Item Already Added to Cart!');
+                                        context, itemAlreadyAddedToCart);
                                   });
                                 }
                               : () {
@@ -114,7 +143,7 @@ class FavoriteProductWidget extends StatelessWidget {
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
                                     showCustomSnackBar(
-                                        context, 'Item Added to Cart!');
+                                        context, itemAddedToCart);
                                   });
                                 },
                           icon: const Icon(

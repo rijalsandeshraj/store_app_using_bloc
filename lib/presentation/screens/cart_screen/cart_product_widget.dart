@@ -1,5 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
+import 'package:store_app_using_bloc/core/constants/snack_bar_messages.dart';
+import 'package:store_app_using_bloc/core/utils/show_custom_snack_bar.dart';
 
 import '../../../bloc/all_products/all_products_bloc.dart';
 import '../../../core/constants/colors.dart';
@@ -45,11 +49,31 @@ class CartProductWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
-              width: 80,
-              height: 80,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(cartProduct.image!))),
+            width: 80,
+            height: 80,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: cartProduct.image!,
+                fit: BoxFit.contain,
+                placeholder: (context, url) => FittedBox(
+                  child: SizedBox(
+                    height: 80,
+                    width: 80,
+                    child:
+                        Lottie.asset('/assets/animations/image_loading.json'),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Center(
+                  child: Image.asset(
+                    'assets/images/no_image_available.jpg',
+                    height: 80,
+                    width: 80,
+                  ),
+                ),
+              ),
+            ),
+          ),
           const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +89,7 @@ class CartProductWidget extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               SizedBox(
-                width: deviceWidth / 2,
+                width: deviceWidth / 1.95,
                 child: Row(
                   children: [
                     Row(
@@ -90,9 +114,12 @@ class CartProductWidget extends StatelessWidget {
                         ),
                         child: IconButton(
                             padding: EdgeInsets.zero,
-                            onPressed: () => context
-                                .read<AllProductsBloc>()
-                                .add(RemoveFromCartEvent(cartProduct.id!)),
+                            onPressed: () {
+                              context
+                                  .read<AllProductsBloc>()
+                                  .add(RemoveFromCartEvent(cartProduct.id!));
+                              showCustomSnackBar(context, itemRemovedFromCart);
+                            },
                             icon: const Icon(
                               Icons.delete_forever_rounded,
                               color: AppColor.white,
@@ -102,7 +129,7 @@ class CartProductWidget extends StatelessWidget {
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                          horizontal: 9, vertical: 6),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: AppColor.purple.withOpacity(0.6),
@@ -132,13 +159,18 @@ class CartProductWidget extends StatelessWidget {
           const Spacer(),
           CounterWidget(
             cartProduct.quantity.toString(),
-            onDecrementPressed: () => cartProduct.quantity > 1
-                ? context
+            onDecrementPressed: () {
+              if (cartProduct.quantity > 1) {
+                context
                     .read<AllProductsBloc>()
-                    .add(DecreaseQuantityEvent(cartProduct.id!))
-                : context
+                    .add(DecreaseQuantityEvent(cartProduct.id!));
+              } else {
+                context
                     .read<AllProductsBloc>()
-                    .add(RemoveFromCartEvent(cartProduct.id!)),
+                    .add(RemoveFromCartEvent(cartProduct.id!));
+                showCustomSnackBar(context, itemRemovedFromCart);
+              }
+            },
             onIncrementPressed: () => context
                 .read<AllProductsBloc>()
                 .add(IncreaseQuantityEvent(cartProduct.id!)),

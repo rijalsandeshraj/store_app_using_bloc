@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lottie/lottie.dart';
+import 'package:store_app_using_bloc/core/constants/snack_bar_messages.dart';
 import 'package:store_app_using_bloc/core/utils/show_custom_snack_bar.dart';
 import 'package:store_app_using_bloc/data/store_repository.dart';
 import 'package:store_app_using_bloc/presentation/screens/home_screen/home_screen.dart';
@@ -81,7 +83,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 2 / 3,
+                childAspectRatio: 2 / 3.2,
               ),
               itemCount: productsList.length,
               itemBuilder: (_, index) {
@@ -98,6 +100,31 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         ),
                       ),
                       Positioned(
+                        top: 10,
+                        bottom: 80,
+                        child: SizedBox(
+                          width: widget.titleContainerWidth - 10,
+                          child: CachedNetworkImage(
+                            imageUrl: product.image!,
+                            fit: BoxFit.contain,
+                            placeholder: (context, url) => FittedBox(
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: AppColor.primaryPink.withOpacity(0.3),
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Center(
+                              child: Image.asset(
+                                  'assets/images/no_image_available.jpg',
+                                  height: widget.titleContainerWidth),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
                         bottom: 10,
                         left: 10,
                         child: SizedBox(
@@ -110,6 +137,29 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 style: productTitle2TextStyle,
+                              ),
+                              const SizedBox(height: 2),
+                              RatingBar(
+                                initialRating: product.rating!.rate ?? 0,
+                                direction: Axis.horizontal,
+                                itemCount: 5,
+                                itemSize: 15,
+                                allowHalfRating: true,
+                                ignoreGestures: true,
+                                ratingWidget: RatingWidget(
+                                    full: const Icon(
+                                      Icons.star,
+                                      color: Colors.orange,
+                                    ),
+                                    half: const Icon(
+                                      Icons.star_half,
+                                      color: Colors.orange,
+                                    ),
+                                    empty: const Icon(
+                                      Icons.star_outline,
+                                      color: Colors.orange,
+                                    )),
+                                onRatingUpdate: (value) {},
                               ),
                               const SizedBox(height: 2),
                               Row(
@@ -131,46 +181,20 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         ),
                       ),
                       Positioned(
-                        top: 10,
-                        bottom: 75,
-                        child: SizedBox(
-                          width: widget.titleContainerWidth - 10,
-                          child: CachedNetworkImage(
-                            imageUrl: product.image!,
-                            fit: BoxFit.contain,
-                            placeholder: (context, url) => FittedBox(
-                              child: SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: CircularProgressIndicator(
-                                  color: AppColor.primaryPink.withOpacity(0.3),
-                                ),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => Center(
-                              child: Image.asset(
-                                  'assets/no_image_available.jpg',
-                                  height: widget.titleContainerWidth),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
                         right: 10,
                         bottom: 10,
                         child: GestureDetector(
                           onTap: product.addedToCart
                               ? () {
                                   showCustomSnackBar(
-                                      context, 'Item Already Added to Cart!');
+                                      context, itemAlreadyAddedToCart);
                                 }
                               : () {
                                   context
                                       .read<AllProductsBloc>()
                                       .add(AddToCartEvent(product.id!));
 
-                                  showCustomSnackBar(
-                                      context, 'Item Added to Cart!');
+                                  showCustomSnackBar(context, itemAddedToCart);
                                 },
                           child: Container(
                             padding: const EdgeInsets.all(3),
@@ -198,14 +222,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   context.read<AllProductsBloc>().add(
                                       RemoveFromFavoritesEvent(product.id!));
                                   showCustomSnackBar(
-                                      context, 'Item Removed from Favorites!');
+                                      context, itemRemovedFromFavorites);
                                 }
                               : () {
                                   context
                                       .read<AllProductsBloc>()
                                       .add(AddToFavoritesEvent(product.id!));
                                   showCustomSnackBar(
-                                      context, 'Item Added to Favorites!');
+                                      context, itemAddedToFavorites);
                                 },
                         ),
                       ),
