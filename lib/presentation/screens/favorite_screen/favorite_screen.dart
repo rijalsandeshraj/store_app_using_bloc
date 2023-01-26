@@ -28,8 +28,10 @@ class FavoriteScreen extends StatelessWidget {
           padding: const EdgeInsets.only(left: 3),
           child: FittedBox(
             child: Container(
+              height: 30,
+              width: 30,
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.only(left: 9),
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColor.white,

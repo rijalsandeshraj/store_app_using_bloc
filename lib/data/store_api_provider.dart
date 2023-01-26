@@ -14,8 +14,6 @@ class StoreApiProvider {
       for (var element in response) {
         products.add(Product.fromJson(element));
       }
-      // List<Product> products =
-      //     response.map((e) => Product.fromJson(e)).toList();
       return products;
     }
     return null;

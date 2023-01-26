@@ -26,21 +26,18 @@ class CartScreen extends StatelessWidget {
       backgroundColor: AppColor.scaffoldBackground,
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 3),
-          child: FittedBox(
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.white,
-              ),
-              child: Text(
-                cartProducts.length.toString(),
-                style: selectedCategoryTextStyle,
-              ),
-            ),
+        leading: Container(
+          height: 30,
+          width: 30,
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(left: 9),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColor.white,
+          ),
+          child: Text(
+            cartProducts.length.toString(),
+            style: selectedCategoryTextStyle,
           ),
         ),
         title: const Text(
